@@ -1,4 +1,4 @@
-# BlogNest
+# <img src='assets/images/BlogNest.png' width=40> BlogNest
 
 BlogNest is mainly a test app for deploying to AWS.
 It should contain pages for:
