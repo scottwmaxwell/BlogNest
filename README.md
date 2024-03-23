@@ -8,6 +8,8 @@ It should contain pages for:
 - Editing a single blog post
 - Creating a blog post
 
+<img src='assets/images/WireFrames.png' width=400>
+
 It will be built using the [MERN stack](https://www.mongodb.com/mern-stack):
 
 - MongoDB
