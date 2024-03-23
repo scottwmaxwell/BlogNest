@@ -19,6 +19,10 @@ It will be built using the [MERN stack](https://www.mongodb.com/mern-stack):
 
 <img src='assets/images/design.png' width=200>
 
+## Database Diagram (noSQL):
+
+<img src='assets/images/DatabaseDiagram.png' width=400>
+
 ## Resources:
 
 - [MERN Stack Explained](https://www.mongodb.com/mern-stack)
