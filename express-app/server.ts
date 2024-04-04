@@ -10,11 +10,23 @@ const JWT_SECRET = 'your_jwt_secret';
 
 app.use(bodyParser.json());
 
+// Define user type for Request object
+declare global {
+    namespace Express {
+        interface Request {
+            user?: { username: string };
+        }
+    }
+}
+
 // Place connection code here!!
-mongoose.connect('',
-    { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.error(err));
+mongoose.connect('', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+} as any)
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.error(err));
+
 
 const postSchema = new mongoose.Schema({
     title: String,
@@ -60,13 +72,14 @@ const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-// API route
+// API routes
+
 // Get all blog posts
 app.get('/api/posts', async (req: Request, res: Response) => {
     try {
         const posts = await PostModel.find();
         res.json(posts);
-    } catch (err) {
+    } catch (err:any) {
         res.status(500).json({ message: err.message });
     }
 });
@@ -79,25 +92,33 @@ app.get('/api/posts/:id', async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Post not found' });
         }
         res.json(post);
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 });
 
 // Create a new blog post
 app.post('/api/posts', authenticateUser, async (req: Request, res: Response) => {
+    const author = req.user?.username; // Optional chaining here
+
+    if (!author) {
+        return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+    }
+
     const post = new PostModel({
         title: req.body.title,
         content: req.body.content,
-        author: req.user.username
+        author: author // Using the retrieved author here
     });
+
     try {
         const newPost = await post.save();
         res.status(201).json(newPost);
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // Update a blog post
 app.put('/api/posts/:id', authenticateUser, async (req: Request, res: Response) => {
@@ -110,7 +131,7 @@ app.put('/api/posts/:id', authenticateUser, async (req: Request, res: Response) 
         post.content = req.body.content;
         const updatedPost = await post.save();
         res.json(updatedPost);
-    } catch (err) {
+    } catch (err:any) {
         res.status(400).json({ message: err.message });
     }
 });
@@ -122,12 +143,13 @@ app.delete('/api/posts/:id', authenticateUser, async (req: Request, res: Respons
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
-        await post.remove();
+        await PostModel.deleteOne({ _id: req.params.id });
         res.json({ message: 'Post deleted successfully' });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 // User registration
 app.post('/api/register', async (req: Request, res: Response) => {
@@ -139,7 +161,7 @@ app.post('/api/register', async (req: Request, res: Response) => {
         });
         await user.save();
         res.status(201).json({ message: 'User registered successfully' });
-    } catch (err) {
+    } catch (err: any) {
         res.status(400).json({ message: err.message });
     }
 });
@@ -157,7 +179,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
         }
         const token = jwt.sign({ username: user.username }, JWT_SECRET);
         res.json({ token });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 });
