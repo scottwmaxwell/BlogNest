@@ -89,10 +89,23 @@ app.get('/api/posts', async (req: Request, res: Response) => {
     }
 });
 
-// Get a single blog post
+// Get a single blog post by id
 app.get('/api/posts/:id', async (req: Request, res: Response) => {
     try {
         const post = await PostModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json(post);
+    } catch (err: any) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get a single blog post by author username
+app.get('/api/posts/:author', async (req: Request, res: Response) => {
+    try {
+        const post = await PostModel.find({"author":req.params.author});
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
         }
