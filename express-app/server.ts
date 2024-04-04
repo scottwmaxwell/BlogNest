@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
+const mongoURI = process.env.MONGO_URI;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,8 +24,8 @@ declare global {
     }
 }
 
-// Place connection code here!!
-mongoose.connect('', {
+// Change connection info in .env file at the root of the express-app directory
+mongoose.connect(mongoURI!, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 } as any)
