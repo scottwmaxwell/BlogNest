@@ -1,0 +1,100 @@
+#logo{
+    margin-right:10px;
+}
+
+.nav-item{
+    margin-left:10px;
+}
+
+.nav-item:hover{
+    opacity:80%;
+    cursor:pointer;
+}
+
+@media screen and (min-width: 990px) {
+    #navbarNav{
+        flex:auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    #make-a-bite{
+        border-radius:30px;
+    }
+    
+    #discover{
+        border-radius:30px;
+    }
+}
+
+@media (prefers-color-scheme: light){
+
+
+    .navbar{
+        background-color:rgb(228, 229, 234);
+    }
+
+
+    #make-a-bite{
+        background-color: #b28787;
+    }
+    
+    #discover{
+        background-color: #699080;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .navbar{
+        background-color:#1f232b;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(114, 125, 156, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
+
+    .navbar-toggler {
+        border-color: rgb(72, 79, 95);
+    }
+
+    .navbar a{
+        color:white !important;
+    }
+
+    .navbar a:hover{
+        color:white;
+    }
+
+    .navbar p{
+        color:white;
+    }
+
+    #make-a-bite{
+        background-color: #8c5d5d;
+    }
+    
+    #discover{
+        background-color: #505553;
+    }
+}
+
+/* Animation */
+@keyframes tiltAnimation {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(-15deg); /* Tilt left */
+    }
+    100% {
+      transform: rotate(15deg); /* Tilt right */
+    }
+  }
+
+/* Only apply animation if they do NOT prefer less motion */
+@media not (prefers-reduced-motion: reduce){
+    #logo {
+        animation: tiltAnimation 3s 1 forwards; /* Play the animation once */
+    }
+}
