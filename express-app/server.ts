@@ -82,6 +82,8 @@ const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
 
 // Get all blog posts
 app.get('/api/posts', async (req: Request, res: Response) => {
+
+    console.log('/api/posts')
     try {
         const posts = await PostModel.find();
         res.json(posts);
@@ -117,17 +119,24 @@ app.get('/api/posts/author/:author', async (req: Request, res: Response) => {
 });
 
 // Create a new blog post
-app.post('/api/posts', authenticateUser, async (req: Request, res: Response) => {
-    const author = req.user?.username; // Optional chaining here
+// Removed AuthenticateUser requirement
+app.post('/api/posts', async (req: Request, res: Response) => {
 
-    if (!author) {
-        return res.status(401).json({ message: 'Unauthorized: Invalid token' });
-    }
+    console.log('api/posts');
+
+    // const author = req.user?.username; // Optional chaining here
+
+    // if (!author) {
+    //     return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+    // }
 
     const post = new PostModel({
         title: req.body.title,
         content: req.body.content,
-        author: author // Using the retrieved author here
+        description: req.body.description,
+        imageURL: req.body.imageURL,
+        author: req.body.author 
+        // author: author // Using the retrieved author here
     });
 
     try {
