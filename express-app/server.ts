@@ -10,7 +10,7 @@ dotenv.config();
 const mongoURI = process.env.MONGO_URI;
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const JWT_SECRET = 'your_jwt_secret';
 
 app.use(bodyParser.json());
