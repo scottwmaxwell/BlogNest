@@ -4,7 +4,6 @@ import logo from "../assets/BlogNest.png";
 import {Link} from 'react-router-dom';
 
 function Navbar(){
-
     return(
         <div>
         <nav id="navbar" className="navbar navbar-expand-lg p-0 fixed-top">
@@ -16,8 +15,8 @@ function Navbar(){
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                <li className="nav-item" id="make-a-bite" role="presentation"><Link to='/create' className="nav-link">Make a Blog!</Link></li>
-                <li className="nav-item" id="discover" role="presentation"><Link to='/discover' className="nav-link">Discover</Link></li>
+                <li className="nav-item" id="blogs-button" role="presentation"><Link to='/' className="nav-link">Blogs</Link></li>
+                <li className="nav-item" id="create-button" role="presentation"><Link to='/create' className="nav-link">Create</Link></li>
                 </ul>
             </div>
             </div>

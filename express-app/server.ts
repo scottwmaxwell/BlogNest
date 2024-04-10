@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-
+import cors from 'cors';
 
 dotenv.config();
 const mongoURI = process.env.MONGO_URI;
@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = 'your_jwt_secret';
 
 app.use(bodyParser.json());
+app.use(cors());    // allows cross-origin
 
 // Define user type for Request object
 declare global {
@@ -103,7 +104,7 @@ app.get('/api/posts/:id', async (req: Request, res: Response) => {
 });
 
 // Get a single blog post by author username
-app.get('/api/posts/:author', async (req: Request, res: Response) => {
+app.get('/api/posts/author/:author', async (req: Request, res: Response) => {
     try {
         const post = await PostModel.find({"author":req.params.author});
         if (!post) {
