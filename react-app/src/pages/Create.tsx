@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import dataSource from '../dataSource';
 import { useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function Create(){
 
@@ -18,10 +18,6 @@ function Create(){
         author: "username"
     });
 
-    useEffect(()=>{
-        loadBlog();
-    }, []);
-
     var editMode = true;
     let title = "Edit Blog Post"
     const { id } = useParams()
@@ -31,9 +27,15 @@ function Create(){
         title = "Create a Blog Post"
     }
 
+    useEffect(()=>{
+        loadBlog();
+    }, []);
+
     const loadBlog = async () =>{
-        const response = await dataSource.get('/api/posts/' + id);
-        setBlog(response.data);
+        if(editMode === true){
+            const response = await dataSource.get('/api/posts/' + id);
+            setBlog(response.data);
+        }
     }
 
     const handleFormSumit = async (event: any) => {
