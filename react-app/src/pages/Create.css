@@ -1,0 +1,16 @@
+.form-group{
+    margin-bottom:20px;
+}
+
+input:focus, textarea:focus {
+    outline: none !important;
+    border-color: initial !important;
+    box-shadow: none !important;
+}
+
+#post-button{
+    color: rgb(46, 49, 86);
+    background-color:rgb(135, 145, 239);
+    border-radius:15px;
+    border:none;
+}

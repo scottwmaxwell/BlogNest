@@ -18,12 +18,12 @@
         justify-content: flex-end;
     }
 
-    #make-a-bite{
-        border-radius:30px;
+    #create-button{
+        border-radius:0px;
     }
     
-    #discover{
-        border-radius:30px;
+    #blogs-button{
+        border-radius:0px;
     }
 }
 
