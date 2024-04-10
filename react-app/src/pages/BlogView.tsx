@@ -54,6 +54,12 @@ function BlogView(){
                 <center>
                     <img src={blog.imageURL} style={{maxHeight:300}}></img>
                 </center>
+
+                <div className="d-flex justify-content-end">
+                        <a href={'/edit/' + id} style={{borderRadius:"15px", backgroundColor:'rgb(199, 132, 56)', color:"rgb(97, 66, 30)", marginRight:7}} className="btn btn mb-2">Edit</a>
+                        <button style={{borderRadius:"15px", backgroundColor:'rgb(179, 73, 73)', color:"rgb(89, 31, 31)"}} onClick={handleDelete} className="btn btn mb-2">Delete</button>
+                </div>
+
             </div>
             <div className="col-md-3"></div>
         </div>
