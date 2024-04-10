@@ -126,8 +126,6 @@ app.get('/api/posts/author/:author', async (req: Request, res: Response) => {
 // Removed AuthenticateUser requirement
 app.post('/api/posts', async (req: Request, res: Response) => {
 
-    console.log('api/posts');
-
     // const author = req.user?.username; // Optional chaining here
 
     // if (!author) {
@@ -171,7 +169,7 @@ app.put('/api/posts/:id', async (req: Request, res: Response) => {
 
 // Delete a blog post
 // Removed authenticateUser requirement
-app.delete('/api/posts/:id', authenticateUser, async (req: Request, res: Response) => {
+app.delete('/api/posts/:id', async (req: Request, res: Response) => {
     try {
         const post = await PostModel.findById(req.params.id);
         if (!post) {
