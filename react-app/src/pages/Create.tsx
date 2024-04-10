@@ -1,8 +1,9 @@
 import "./Create.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dataSource from '../dataSource';
 import { useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
+import { useParams, Link } from 'react-router-dom';
 
 function Create(){
 
@@ -17,6 +18,23 @@ function Create(){
         author: "username"
     });
 
+    useEffect(()=>{
+        loadBlog();
+    }, []);
+
+    var editMode = true;
+    let title = "Edit Blog Post"
+    const { id } = useParams()
+
+    if(id === undefined){
+        editMode = false;
+        title = "Create a Blog Post"
+    }
+
+    const loadBlog = async () =>{
+        const response = await dataSource.get('/api/posts/' + id);
+        setBlog(response.data);
+    }
 
     const handleFormSumit = async (event: any) => {
         console.log("form submitted!")
@@ -26,8 +44,14 @@ function Create(){
             ...blog
         }
 
-        await dataSource.post('/api/posts', finalBlog);
-        navigate('/');
+        if(editMode === true){
+            let response = await dataSource.put('/api/posts/' + id, finalBlog);
+            navigate('/blog/' + id);
+        }else{
+            let response = await dataSource.post('/api/posts', finalBlog);
+            navigate('/');
+        }
+
     }
 
     const updateField = (field: string, value: string) => {
@@ -45,7 +69,7 @@ function Create(){
         <div className="col-sm-6">
 
             <center>
-                <h1 id='title'>Create a Blog Post</h1>
+                <h1 id='title'>{title}</h1>
             </center>
 
             <div className="row">
@@ -53,20 +77,20 @@ function Create(){
                 <form onSubmit={handleFormSumit}>
 
                     <div className="form-group">
-                        <input required={true} className="form-control form-control-lg" type="text" id="blog-title" maxLength={60} placeholder="Blog Title" onChange={e => updateField('title', e.target.value)}></input>
+                        <input required={true} className="form-control form-control-lg" type="text" id="blog-title" maxLength={60} placeholder="Blog Title" value={blog.title} onChange={e => updateField('title', e.target.value)}></input>
                     </div>
                     
 
                     <div className="form-group">
-                        <input required={true} className="form-control" id="blog-description" maxLength={100} placeholder="Description goes here..." onChange={e => updateField('description', e.target.value)}></input>
+                        <input required={true} className="form-control" id="blog-description" maxLength={100} placeholder="Description goes here..." value={blog.description} onChange={e => updateField('description', e.target.value)}></input>
                     </div>
 
                     <div className="form-group">
-                        <textarea required={true} className="form-control" id="blog-content" placeholder="Main content goes here..." rows={6} onChange={e => updateField('content', e.target.value)}></textarea>
+                        <textarea required={true} className="form-control" id="blog-content" placeholder="Main content goes here..." rows={6} value={blog.content} onChange={e => updateField('content', e.target.value)}></textarea>
                     </div>
 
                     <div className="form-group">
-                        <input className="form-control" id="blog-imageURL" placeholder="https://example.com/image.jpg" onChange={e => updateField('imageURL', e.target.value)}></input>
+                        <input className="form-control" id="blog-imageURL" placeholder="https://example.com/image.jpg" value={blog.imageURL} onChange={e => updateField('imageURL', e.target.value)}></input>
                     </div>
 
                     <div>
