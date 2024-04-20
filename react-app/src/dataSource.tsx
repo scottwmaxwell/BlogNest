@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const dbURL = process.env.REACT_APP_DATABASE_URL || 'http://localhost:4000';
+const apiURL = process.env.REACT_APP_API_URL || 'https://www.blognestapi.site/';
 
 export default axios.create({
-    baseURL: process.env.REACT_APP_DATABASE_URL
+    baseURL: apiURL
 });

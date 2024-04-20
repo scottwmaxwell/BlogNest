@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -12,21 +11,11 @@ const mongoURI = process.env.MONGO_URI;
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const JWT_SECRET = 'your_jwt_secret';
 
 app.use(bodyParser.json());
 app.use(cors()); // allows cross-origin
 
-// Define user type for Request object
-declare global {
-    namespace Express {
-        interface Request {
-            user?: { username: string };
-        }
-    }
-}
-
-// Define your own log structure
+// Define log structure
 interface MyLogObj {
     message: string;
     level: string;
@@ -64,34 +53,6 @@ interface Post extends mongoose.Document {
 
 const PostModel = mongoose.model<Post>('Post', postSchema);
 
-const userSchema = new mongoose.Schema({
-    username: String,
-    password: String
-});
-
-interface User extends mongoose.Document {
-    username: string;
-    password: string;
-}
-
-const UserModel = mongoose.model<User>('User', userSchema);
-
-// Middleware for user authentication
-const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized: No token provided' });
-    }
-
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Unauthorized: Invalid token' });
-        }
-        req.user = decoded as { username: string }; // Casting decoded as { username: string }
-        next();
-    });
-};
-
 // Middleware for logging requests
 app.use((req: Request, res: Response, next: NextFunction) => {
     logger.info(`${req.method} ${req.url}`); // Log request method and URL
@@ -99,6 +60,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // API routes
+app.get("/", async(req: Request, res: Response) => {
+    res.status(200).json({ message: "Healthy"});
+});
 
 // Get all blog posts
 app.get('/api/posts', async (req: Request, res: Response) => {
@@ -137,7 +101,6 @@ app.get('/api/posts/author/:author', async (req: Request, res: Response) => {
 });
 
 // Create a new blog post
-// Removed AuthenticateUser requirement
 app.post('/api/posts', async (req: Request, res: Response) => {
     const post = new PostModel({
         title: req.body.title,
@@ -156,9 +119,7 @@ app.post('/api/posts', async (req: Request, res: Response) => {
     }
 });
 
-
 // Update a blog post
-// Removed authenticateUser requirement
 app.put('/api/posts/:id', async (req: Request, res: Response) => {
     try {
         const post = await PostModel.findById(req.params.id);
@@ -175,7 +136,6 @@ app.put('/api/posts/:id', async (req: Request, res: Response) => {
 });
 
 // Delete a blog post
-// Removed authenticateUser requirement
 app.delete('/api/posts/:id', async (req: Request, res: Response) => {
     try {
         const post = await PostModel.findById(req.params.id);
@@ -184,40 +144,6 @@ app.delete('/api/posts/:id', async (req: Request, res: Response) => {
         }
         await PostModel.deleteOne({ _id: req.params.id });
         res.json({ message: 'Post deleted successfully' });
-    } catch (err: any) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-
-// User registration
-app.post('/api/register', async (req: Request, res: Response) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const user = new UserModel({
-            username: req.body.username,
-            password: hashedPassword
-        });
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (err: any) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
-// User login
-app.post('/api/login', async (req: Request, res: Response) => {
-    try {
-        const user = await UserModel.findOne({ username: req.body.username });
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid username or password' });
-        }
-        const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid username or password' });
-        }
-        const token = jwt.sign({ username: user.username }, JWT_SECRET);
-        res.json({ token });
     } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
