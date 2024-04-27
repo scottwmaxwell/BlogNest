@@ -30,3 +30,4 @@ It will be built using the [MERN stack](https://www.mongodb.com/mern-stack):
 - [ExpressJS Docs](https://expressjs.com/en/4x/api.html)
 - [ReactJS Docs](https://react.dev/reference/react)
 - [NodeJS Docs](https://nodejs.org/docs/latest/api/)
+- [AWS EB Pipelines](https://aws.amazon.com/getting-started/hands-on/continuous-deployment-pipeline/)
