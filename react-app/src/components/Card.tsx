@@ -18,7 +18,7 @@ function Card(props: any) {
     }
 
     return (
-        <div className="card mb-3">
+        <div data-testid="card-component" className="card mb-3">
             <div className="row g-0">
                 <div className="col-md-2">
                     <a href={blogURL}><img src={cardImage} className="img-fluid rounded-start" alt="Placeholder" /></a>

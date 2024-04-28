@@ -35,7 +35,7 @@ function Blogs(){
                 <div className="col-sm-6">
 
                     <center>
-                        <h1 id='title'>Blogs</h1>
+                        <h1 id='title'>Blogs Below:</h1>
                     </center>
 
                     <div className="row">
