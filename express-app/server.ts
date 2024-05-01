@@ -22,6 +22,8 @@ interface MyLogObj {
     timestamp: string;
 }
 
+// Created a comment
+
 // Initialize tslog logger with custom log structure
 const logger: Logger<MyLogObj> = new Logger({stylePrettyLogs: false});
 
