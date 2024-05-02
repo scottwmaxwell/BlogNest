@@ -10,7 +10,7 @@
       "outDir": "./build"
       
     },
-    "include": ["*.ts"],
+    "include": ["*.ts", "./src/*"],
     "exclude": ["node_modules"]
   }
   
